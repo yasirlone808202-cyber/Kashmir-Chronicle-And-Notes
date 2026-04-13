@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Kashmir Portal"
+version = "1.0.0"
+id = "artifacts/kashmir-portal"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19378
+
+[services.development]
+run = "pnpm --filter @workspace/kashmir-portal run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/kashmir-portal", "run", "build" ]
+publicDir = "artifacts/kashmir-portal/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19378"
+BASE_PATH = "/"
