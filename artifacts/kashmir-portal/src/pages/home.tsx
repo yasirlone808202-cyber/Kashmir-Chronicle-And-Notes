@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
-import { ChevronRight, Leaf, Map, Book, Users } from "lucide-react";
+import { ChevronRight, Leaf, Map, Book, Users, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function IntroSplash({ onComplete }: { onComplete: () => void }) {
@@ -135,7 +135,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <FeatureCard 
               icon={Map}
               title="Rich History"
@@ -149,6 +149,13 @@ export default function Home() {
               desc="Visualizing the current state of Jammu & Kashmir through interactive charts and statistics."
               href="/data"
               color="blue"
+            />
+            <FeatureCard 
+              icon={Compass}
+              title="Explore Kashmir"
+              desc="Travel guides and stories about Kashmir's most stunning places — written by a Kashmiri."
+              href="/explore"
+              color="teal"
             />
             <FeatureCard 
               icon={Book}
@@ -193,6 +200,7 @@ function FeatureCard({ icon: Icon, title, desc, href, color }: any) {
   const colorMap = {
     emerald: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
     blue: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800",
+    teal: "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 border-teal-200 dark:border-teal-800",
     amber: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800",
   };
   

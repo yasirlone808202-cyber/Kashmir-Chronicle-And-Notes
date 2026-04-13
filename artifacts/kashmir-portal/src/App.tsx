@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import History from "@/pages/history";
 import Data from "@/pages/data";
 import Notes from "@/pages/notes";
+import Explore from "@/pages/explore";
 import Layout from "@/components/layout";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ function Router() {
         <Route path="/history" component={History} />
         <Route path="/data" component={Data} />
         <Route path="/notes" component={Notes} />
+        <Route path="/explore" component={Explore} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

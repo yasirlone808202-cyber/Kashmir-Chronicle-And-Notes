@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { MountainSnow, BookOpen, BarChart3, Clock, Menu } from "lucide-react";
+import { MountainSnow, BookOpen, BarChart3, Clock, Menu, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -10,6 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { name: "Home", href: "/", icon: MountainSnow },
     { name: "History", href: "/history", icon: Clock },
     { name: "Data Hub", href: "/data", icon: BarChart3 },
+    { name: "Explore", href: "/explore", icon: Compass },
     { name: "Study Notes", href: "/notes", icon: BookOpen },
   ];
 
