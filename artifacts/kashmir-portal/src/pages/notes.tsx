@@ -262,6 +262,7 @@ export default function Notes() {
   const [accessList, setAccessList] = useLocalStorage<AccessEntry[]>("kashmir_access_v2", []);
 
   const [activeGrade, setActiveGrade] = useState<"11th" | "12th">("12th");
+  const [searchQuery, setSearchQuery] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminPass, setAdminPass] = useState("");
   const [adminError, setAdminError] = useState(false);
@@ -299,7 +300,16 @@ export default function Notes() {
   const isUnlocked = (noteId: string) => accessList.some((a) => a.noteId === noteId);
 
   const activeSubjects = activeGrade === "11th" ? SUBJECTS_11 : SUBJECTS_12;
-  const filteredNotes = notes.filter((n) => n.grade === activeGrade);
+  const filteredNotes = notes.filter((n) => {
+    if (n.grade !== activeGrade) return false;
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      n.chapter.toLowerCase().includes(q) ||
+      n.subject.toLowerCase().includes(q) ||
+      n.content.toLowerCase().includes(q)
+    );
+  });
 
   const loadAdminRequests = useCallback(async () => {
     setAdminLoading(true);
@@ -518,6 +528,27 @@ export default function Notes() {
           </div>
         </div>
 
+        {/* Search bar */}
+        <div className="relative mb-8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by chapter, subject or keyword..."
+            className="pl-11 pr-10 h-11 text-sm rounded-xl bg-card border-border shadow-sm"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
         {/* Admin: Payments Panel */}
         <AnimatePresence>
           {isAdmin && showAdminPanel && (
@@ -686,8 +717,17 @@ export default function Notes() {
         {filteredNotes.length === 0 ? (
           <div className="text-center py-24 text-muted-foreground">
             <BookOpen className="h-12 w-12 mx-auto mb-4 opacity-30" />
-            <p className="text-lg font-medium">No notes for Class {activeGrade} yet.</p>
-            {isAdmin && <Button className="mt-4 gap-2" onClick={openAddForm}><Plus className="h-4 w-4" /> Add the first note</Button>}
+            {searchQuery ? (
+              <>
+                <p className="text-lg font-medium">No results for &ldquo;{searchQuery}&rdquo;</p>
+                <p className="text-sm mt-1">Try a different keyword or <button onClick={() => setSearchQuery("")} className="text-amber-600 underline">clear the search</button></p>
+              </>
+            ) : (
+              <>
+                <p className="text-lg font-medium">No notes for Class {activeGrade} yet.</p>
+                {isAdmin && <Button className="mt-4 gap-2" onClick={openAddForm}><Plus className="h-4 w-4" /> Add the first note</Button>}
+              </>
+            )}
           </div>
         ) : (
           <div className="space-y-12">
