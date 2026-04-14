@@ -1,0 +1,8 @@
+[build]
+  publish = "artifacts/kashmir-portal/dist"
+  command = "tsc --build && pnpm --filter @workspace/kashmir-portal... run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
