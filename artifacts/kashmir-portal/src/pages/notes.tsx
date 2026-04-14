@@ -694,7 +694,7 @@ export default function Notes() {
             {activeSubjects
               .filter((s) => filteredNotes.some((n) => n.subject === s))
               .map((subject) => {
-                const subjectNotes = filteredNotes.filter((n) => n.subject === s);
+                const subjectNotes = filteredNotes.filter((n) => n.subject === subject);
                 return (
                   <section key={subject}>
                     <div className="flex items-center gap-3 mb-5">
