@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import History from "@/pages/history";
 import Data from "@/pages/data";
 import Notes from "@/pages/notes";
+import MyNotes from "@/pages/my-notes";
 import Explore from "@/pages/explore";
 import Layout from "@/components/layout";
 import { AuthProvider } from "@/contexts/auth-context";
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/history" component={History} />
         <Route path="/data" component={Data} />
         <Route path="/notes" component={Notes} />
+        <Route path="/my-notes" component={MyNotes} />
         <Route path="/explore" component={Explore} />
         <Route component={NotFound} />
       </Switch>

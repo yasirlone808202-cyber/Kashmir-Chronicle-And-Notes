@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { MountainSnow, BookOpen, BarChart3, Clock, Menu, Compass, User, LogOut, LogIn, UserPlus, AlertCircle } from "lucide-react";
+import { MountainSnow, BookOpen, BarChart3, Clock, Menu, Compass, User, LogOut, LogIn, UserPlus, AlertCircle, Library } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -95,9 +95,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         <p className="text-sm font-semibold truncate">{user.name}</p>
                         <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                       </div>
-                      <Link href="/notes" onClick={() => setShowUserMenu(false)}
+                      <Link href="/my-notes" onClick={() => setShowUserMenu(false)}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted transition-colors w-full text-left">
-                        <BookOpen className="h-4 w-4 text-amber-600" /> My Unlocked Notes
+                        <Library className="h-4 w-4 text-amber-600" /> My Notes
                       </Link>
                       <button onClick={() => { logout(); setShowUserMenu(false); }}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left">
@@ -146,6 +146,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         <div className="w-7 h-7 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center shrink-0">{initials}</div>
                         <div className="min-w-0"><p className="text-sm font-semibold truncate">{user.name}</p><p className="text-xs text-muted-foreground truncate">{user.email}</p></div>
                       </div>
+                      <Link href="/my-notes"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors">
+                        <Library className="h-4 w-4" /> My Notes
+                      </Link>
                       <Button variant="outline" size="sm" className="w-full gap-2 text-red-600 border-red-200" onClick={logout}>
                         <LogOut className="h-4 w-4" /> Sign Out
                       </Button>
