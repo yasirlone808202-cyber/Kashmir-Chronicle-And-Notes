@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useAuth } from "@/contexts/auth-context";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
@@ -260,6 +261,7 @@ function downloadTextFile(note: Note) {
 export default function Notes() {
   const [notes, setNotes] = useLocalStorage<Note[]>("kashmir_notes_v3", DEFAULT_NOTES);
   const [accessList, setAccessList] = useLocalStorage<AccessEntry[]>("kashmir_access_v2", []);
+  const { user, unlockedNotes, refreshUnlocked } = useAuth();
 
   const [activeGrade, setActiveGrade] = useState<"11th" | "12th">("12th");
   const [searchQuery, setSearchQuery] = useState("");
@@ -297,7 +299,9 @@ export default function Notes() {
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const isUnlocked = (noteId: string) => accessList.some((a) => a.noteId === noteId);
+  const isUnlocked = (noteId: string) =>
+    accessList.some((a) => a.noteId === noteId) ||
+    unlockedNotes.some((n) => n.noteId === noteId);
 
   const activeSubjects = activeGrade === "11th" ? SUBJECTS_11 : SUBJECTS_12;
   const filteredNotes = notes.filter((n) => {
@@ -449,6 +453,7 @@ export default function Notes() {
       const data = await res.json();
       if (data.valid) {
         setAccessList([...accessList.filter((a) => a.noteId !== accessNote.id), { noteId: accessNote.id, code: accessForm.code.trim().toUpperCase() }]);
+        await refreshUnlocked();
         setShowAccessDialog(false);
       } else { setAccessError("Invalid code or email. Please check and try again."); }
     } catch { setAccessError("Network error. Please try again."); }
@@ -527,6 +532,30 @@ export default function Notes() {
             )}
           </div>
         </div>
+
+        {/* Logged-in user banner */}
+        {user && (
+          <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-emerald-500 text-white text-sm font-bold flex items-center justify-center shrink-0">
+                {user.name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2)}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-emerald-900">Hello, {user.name.split(" ")[0]}!</p>
+                <p className="text-xs text-emerald-700">
+                  {unlockedNotes.length === 0
+                    ? "You have no unlocked notes yet."
+                    : `You have ${unlockedNotes.length} unlocked ${unlockedNotes.length === 1 ? "note" : "notes"} — they're marked with a green badge.`}
+                </p>
+              </div>
+            </div>
+            {unlockedNotes.length > 0 && (
+              <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300 border shrink-0">
+                <LockOpen className="h-3 w-3 mr-1" /> {unlockedNotes.length} Unlocked
+              </Badge>
+            )}
+          </div>
+        )}
 
         {/* Search bar */}
         <div className="relative mb-8">

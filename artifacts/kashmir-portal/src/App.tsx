@@ -9,6 +9,7 @@ import Data from "@/pages/data";
 import Notes from "@/pages/notes";
 import Explore from "@/pages/explore";
 import Layout from "@/components/layout";
+import { AuthProvider } from "@/contexts/auth-context";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +33,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>
